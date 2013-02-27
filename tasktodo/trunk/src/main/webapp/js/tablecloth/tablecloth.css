@@ -1,0 +1,46 @@
+/* 
+
+	TableCloth	
+	by Alen Grakalic, brought to you by cssglobe.com
+	
+*/
+
+/* general styles */
+
+
+
+table.cloth{
+	width:100%;border-collapse:collapse;margin:1em 0;
+	font-family:arial;
+	font-size: 8pt;	
+}
+
+table.cloth tr th{
+	background:#328aa4 url(tr_back.gif) repeat-x;color:#fff;
+}
+
+table.cloth tr th, table.cloth tr td{
+	text-align:left;padding:.3em;border:1px solid #fff;
+}
+
+table.cloth tr td{
+	background:#e5f1f4;
+}
+
+table.cloth tr.even td{background:#e5f1f4;}
+table.cloth tr.odd td{background:#f8fbfc;}
+
+table.cloth tbody td {
+	font-family:arial;
+	font-size: 8pt;	
+}
+
+/*
+th.over, tr.even th.over, tr.odd th.over{background:#4a98af;}
+th.down, tr.even th.down, tr.odd th.down{background:#bce774;}
+th.selected, tr.even th.selected, tr.odd th.selected{}
+
+td.over, tr.even td.over, tr.odd td.over{background:#ecfbd4;}
+td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
+td.selected, tr.even td.selected, tr.odd td.selected{background:#bce774;color:#555;}
+*/

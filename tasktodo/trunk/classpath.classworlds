@@ -1,0 +1,7 @@
+main is com.snda.youni.taskweb.ServerLauncher from myApp
+
+[myApp]
+load ${project.home}/conf
+load ${project.home}/lib/*.jar
+load ${project.home}/3rd-lib/*.jar
+load ${project.home}/classes

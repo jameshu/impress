@@ -1,0 +1,88 @@
+
+A:link {
+ color: #3E5B76;
+ TEXT-DECORATION: none
+}
+A:visited {
+ COLOR: #3E5B76;
+ TEXT-DECORATION: none
+}
+A:hover {
+ COLOR: #ff7f24;
+ text-decoration: underline;
+}
+A:active {
+ COLOR: #ff7f24;  
+ text-decoration: underline;
+}
+
+body {
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+	font-size: 10px;
+	margin: 0; padding: 0; min-width: 900px;
+}
+
+td.wordblue{
+	color: blue;
+}
+
+td.wordgreen{
+	color: green;
+}
+
+#top-menu {background: #3E5B76; color: #fff; height:1.8em; font-size: 0.8em; padding: 2px 2px 0px 6px;}
+#top-menu ul {margin: 0;  padding: 0;}
+#top-menu li {
+  float:left;
+  list-style-type:none;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  white-space:nowrap;
+}
+#top-menu a {color: #fff; margin-right: 8px; font-weight: bold;}
+#top-menu #loggedas { float: right; margin-right: 0.5em; color: #fff; }
+
+#header {height:3.0em;margin:0;background-color:#628DB6;color:#f8f8f8; padding: 4px 8px 0px 6px; position:relative;}
+#header a {color:#f8f8f8;}
+#header h1 a.ancestor { font-size: 80%; }
+
+
+#main {background-color:#EEEEEE;}
+
+#content { width: 78%; background-color: #fff; margin: 0px; border-right: 1px solid #ddd; padding: 6px 10px 10px 10px; z-index: 10; }
+* html #content{ width: 78%; padding-left: 0; margin-top: 0px; padding: 6px 10px 10px 10px;}
+html>body #content { min-height: 600px; }
+* html body #content { height: 600px; } /* IE */
+
+
+#sidebar{ float: right; width: 20%; position: relative; z-index: 9; padding: 0; margin: 0;background-color:#EEEEEE;}
+* html #sidebar{ width: 20%; }
+#sidebar h3{ font-size: 14px; margin-top:14px; color: #666;  }
+#sidebar hr{ width: 100%; margin: 0 auto; height: 1px; background: #ccc; border: 0; }
+* html #sidebar hr{ width: 95%; position: relative; left: -6px; color: #ccc; }
+#sidebar .contextual { margin-right: 1em; }
+
+#sidebar a.selected {line-height:1.7em; padding:1px 3px 2px 2px; margin-left:-2px; background-color:#9DB9D5; color:#fff; border-radius:2px;}
+#sidebar a.selected:hover {text-decoration:none;}
+
+
+/***** Calendar *****/
+table.cal {border-collapse: collapse; width: 100%; margin: 0px 0 6px 0;border: 1px solid #d7d7d7;}
+table.cal thead th {width: 14%; background-color:#EEEEEE; padding: 4px; }
+table.cal thead th.week-number {width: auto;}
+table.cal tbody tr {height: 100px;}
+table.cal td {border: 1px solid #d7d7d7; vertical-align: top; font-size: 0.9em;}
+table.cal td.week-number { background-color:#EEEEEE; padding: 4px; border:none; font-size: 1em;}
+table.cal td p.day-num {font-size: 8px; text-align:right;margin: 0px 0 0px 0;}
+table.cal td.odd {background:#eeeeee;color: #bbb;}
+table.cal td.odd p.day-num {color: #bbb;}
+table.cal td.today {background:#fdfa9b;}
+table.cal td.today p.day-num {font-weight: bold;}
+table.cal .starting a {background: url(../images/bullet_go.png) no-repeat -1px -2px; padding-left:16px;color:blue}
+table.cal .ending a {background: url(../images/bullet_end.png) no-repeat -1px -2px; padding-left:16px;color:blue}
+table.cal .starting.ending a, p.cal.legend .starting.ending {background: url(../images/bullet_diamond.png) no-repeat -1px -2px; padding-left:16px;}
+p.cal.legend span {display:block;}
+
+table.cal div.issue {background:#ffffdd; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}
+table.cal div.issue0 {background:#e4e4e4; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}
+table.cal div.issue1 {background:#c6f8ca; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}

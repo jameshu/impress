@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1
+	http://maven.apache.org/xsd/assembly-1.1.1.xsd">
+	<id>release</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+
+	<includeBaseDirectory>true</includeBaseDirectory>
+
+	<fileSets>
+		<fileSet>
+			<includes>
+				<include>classpath.classworlds</include>
+				<include>jvm.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>bin</directory>
+			<fileMode>755</fileMode>
+			<excludes>
+				<exclude>*.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>bin</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+			<outputDirectory>bin</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>lib</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+			<outputDirectory>lib</outputDirectory>
+		</fileSet>
+
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+			<outputDirectory>conf</outputDirectory>
+		</fileSet>
+
+		<fileSet>
+			<directory>profile/release</directory>
+			<excludes>
+				<exclude>assembly.xml</exclude>
+			</excludes>
+			<outputDirectory>conf</outputDirectory>
+		</fileSet>
+
+		<fileSet>
+			<directory>target/classes</directory>
+			<includes>
+				<include>**/*.class</include>
+			</includes>
+			<outputDirectory>classes</outputDirectory>
+		</fileSet>
+
+		<fileSet>
+			<directory>src/main/webapp</directory>
+			<includes>
+				<include>**/**</include>
+			</includes>
+			<outputDirectory>webapp</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<excludes>
+				<exclude>com.snda.youni.taskweb.*:*</exclude>
+			</excludes>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>3rd-lib</outputDirectory>
+		</dependencySet>
+		<dependencySet>
+		    <includes>
+					<include>com.snda.youni.taskweb.*:*</include>
+			</includes>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+</assembly>
