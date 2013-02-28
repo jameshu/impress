@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="header.jsp" %>
 <%@page import="com.snda.youni.taskweb.beans.*" %>
-<%@page import="com.snda.youni.taskweb.util.JsonUtil" %>
+<%@page import="com.snda.youni.taskweb.util.*" %>
 <%@page import="java.util.List" %>
 
 <%
@@ -61,16 +61,13 @@ $().ready(function(){
 	
 	<%if(taskObject!=null){%>
 	
-	var taskObj = <%=JsonUtil.toJsonString(taskObject)%>;
 	//var obj = taskObj.parseJSON()
 	//alert(taskObj.description);
 	var taskObj_feature_id = <%=taskObject.getFeatureId()%>;
 	
 	
 	if(taskObj_feature_id!=0){
-		//var featuresStr = '<%=JsonUtil.toJsonString(fsprintlist)%>';
-		//var obj = eval('('+featuresStr+')');
-		
+	
 		var selectElement = document.getElementById('feature_id_select');
 		for(var i=0;i<selectElement.options.length;i++){
 			if( selectElement.options[i].value==taskObj_feature_id ){
@@ -120,7 +117,6 @@ $().ready(function(){
 	
 	
 	document.getElementById('subject').value = '<%=taskObject.getSubject()%>';
-	document.getElementById('description').value = '<%=taskObject.getDescription()%>';
 	
 	var taskObj_assignee_id = <%=taskObject.getAssignee()%>;
 	if(taskObj_assignee_id!=0){
@@ -235,7 +231,12 @@ $().ready(function(){
 					</tr>
 					<tr>
 						<td>Description :</td>
-						<td><textarea id="description" name="description" cols="50" rows="5"></textarea>
+						<td>
+						<%if(taskObject!=null){%>
+						<textarea id="description" name="description" cols="50" rows="5"><%=HtmlRegexpUtil.replaceTag(taskObject.getDescription())%></textarea>
+						<%}else{%>
+						<textarea id="description" name="description" cols="50" rows="5"></textarea>
+						<%} %>
 						</td>
 					</tr>
 

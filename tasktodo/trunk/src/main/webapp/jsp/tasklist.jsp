@@ -2,18 +2,30 @@
 <%@include file="header.jsp" %>
 <%@page import="com.snda.youni.taskweb.beans.*" %>
 <%@page import="com.snda.youni.taskweb.util.JsonUtil" %>
-<%@page import="java.util.List" %>
+<%@page import="java.util.*" %>
 
 <%
 
 List<CategoryObject> cglist = (List<CategoryObject>)request.getAttribute("cglist");
 List<UserObject> userlist = (List<UserObject>)request.getAttribute("userlist");
+List<TrackerObject> trackerlist = (List<TrackerObject>)request.getAttribute("trackerlist");
+
+String nowdatestr = TaskObject.getDateString(  (new Date()).getTime());
 
 %>
 
 <script type="text/javascript">
 
 $().ready(function(){
+	
+	$("#tracker_id_select").CascadingSelect($("#status_id_select"),
+			"/status/json", {
+				datatype : "json",
+				textfield : "name",
+				valuefiled : "id",
+				parameter : "tracker_id"
+	});
+	
 	
 	$('#start_time').timepicker();
 	$('#due_time').timepicker();
@@ -88,7 +100,7 @@ $().ready(function(){
             //$("<tr><td>任务名称</td><td>状态</td><td>结束日期</td><tr>").appendTo(table1); 
             $.each(data, function (i, n) { 
             	var row = $("<tr></tr>");
-                $("<td style='width:170px;word-wrap:break-word;word-break:break-all'><a href='/task/toedit?task_id="+n.id+"'>" + n.subject + "</a></td><td nowrap class='wordblue'>"+n.statusName+"</td><td nowrap>"+n.dueDateString+"</td>").appendTo(row); 
+                $("<td style='width:170px;word-wrap:break-word;word-break:break-all'><a href='/task/"+n.id+"/edit'>" + n.subject + "</a></td><td nowrap class='wordblue'>"+n.statusName+"</td><td nowrap>"+n.dueDateString+"</td>").appendTo(row); 
                 table1.append(row);
             }); 
             
@@ -105,20 +117,46 @@ $().ready(function(){
 
 <div id="sidebar">
   <table class="cloth">
+    <form id="taskqueryform" method="post" action="/task/save">
     <tr>
-	    <th colspan="2">快速新建紧急任务【to自己】</th>
+	    <th colspan="2">快速新建研发任务【to自己】
+	    <input id="submit" class="submit" type="submit" name="submit" value="保存" />
+	    </th>
     </tr>
     <tr>
       <td>名称  </td>
-      <td><input type="text" id="subject" name="subject" size="25" required /></td>
+      <td>
+      <input type="hidden" name="assignee_id" value="<%=currentuser_id%>"/>
+      <input type="text" id="subject" name="subject" size="25" required />
+      <input type="hidden" name="start_date" value="<%=nowdatestr%>"/>
+      <input type="hidden" name="due_date" value="<%=nowdatestr%>"/>
+      </td>
+    </tr>
+    <tr>
+      <td> Tracker
+      </td>
+      <td>
+           <select id="tracker_id_select" name="tracker_id" required>
+								<option value="" selected="true">请选择</option> 
+								<%if(trackerlist!=null){
+								  for(TrackerObject obj:trackerlist){
+								%>
+								<option value="<%=obj.getId()%>"><%=obj.getName()%></option> 
+								<%}} %>
+		   </select>
+		   Status:
+		   <select id="status_id_select" name="status_id" required>
+		   </select>
+      </td>
     </tr>
     <tr>
       <td>开始时间</td>
       <td><input name="start_time" id="start_time" size="6" required/>
                           结束时间
-                          <input name="due_time" id="due_time" size="6" required/>
+          <input name="due_time" id="due_time" size="6" required/>
       </td>
     </tr>
+    </form>
   </table>
   
   <table id="doingtable" class="cloth">

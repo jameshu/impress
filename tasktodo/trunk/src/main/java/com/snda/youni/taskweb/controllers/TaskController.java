@@ -193,9 +193,13 @@ public class TaskController {
 		UserDAO userDAO = BeanLocator.getBean("userDAO");
 		List<UserObject> userlist = userDAO.query();
 		
+		TrackerDAO trackerDAO = BeanLocator.getBean("trackerDAO");
+		List<TrackerObject> trackerlist = trackerDAO.query();
+		
 		mav.addObject("tasklist_pr",pr);
 		mav.addObject("cglist",cglist);
 		mav.addObject("userlist", userlist);
+		mav.addObject("trackerlist", trackerlist);
 		
 		return mav;
 	}
