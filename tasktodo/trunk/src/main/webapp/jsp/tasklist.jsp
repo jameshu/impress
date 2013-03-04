@@ -6,11 +6,26 @@
 
 <%
 
+Integer pagenum = (Integer)request.getAttribute("page");
+if(pagenum==null){
+	pagenum = 1;
+}
 List<CategoryObject> cglist = (List<CategoryObject>)request.getAttribute("cglist");
 List<UserObject> userlist = (List<UserObject>)request.getAttribute("userlist");
 List<TrackerObject> trackerlist = (List<TrackerObject>)request.getAttribute("trackerlist");
 
 String nowdatestr = TaskObject.getDateString(  (new Date()).getTime());
+
+String q_cgid="";
+System.out.println(request.getAttribute("q_cgid"));
+if(request.getAttribute("q_cgid")!=null){
+	q_cgid = (String)request.getAttribute("q_cgid");
+}
+
+String q_fs_id="";
+if(request.getAttribute("q_fs_id")!=null){
+	q_fs_id = (String)request.getAttribute("q_fs_id");
+}
 
 %>
 
@@ -111,13 +126,23 @@ $().ready(function(){
 	
 });
 
+function onQuerySubmit(pagenum){
+	document.getElementById('q_page').value = pagenum;
+	$("#taskqueryform").submit();
+}
+
 </script>
 
 <div id="main" class="">
 
 <div id="sidebar">
+
+  <%if(q_fs_id!=null && q_fs_id.length()>0){%>
+  <a href="/task/list?q_fs_id=<%=q_fs_id%>&view=calendar">日历视图</a>
+  <%} %>
+
   <table class="cloth">
-    <form id="taskqueryform" method="post" action="/task/save">
+    <form id="newtaskform" method="post" action="/task/save">
     <tr>
 	    <th colspan="2">快速新建研发任务【to自己】
 	    <input id="submit" class="submit" type="submit" name="submit" value="保存" />
@@ -181,20 +206,21 @@ $().ready(function(){
 
 <table >
   <form id="taskqueryform" method="post" action="/task/list">
+  <input type="hidden" id="q_page" name="q_page" value=""/>
   <tr>
     <td>
-                     任务名称:<input type="text" name="q_subject" size="15" value=""/> &nbsp;&nbsp;
-                    特性冲刺：<input type="text" id="q_fs_name" name="q_fs_name" size="15" value="" />
+                     任务名称:<input type="text" name="q_subject" size="15" value="<%=(request.getAttribute("q_subject")==null)?"":request.getAttribute("q_subject")%>"/> &nbsp;&nbsp;
+                    特性冲刺：<input type="text" id="q_fs_name" name="q_fs_name" size="15" value="<%=(request.getAttribute("q_fs_name")==null)?"":request.getAttribute("q_fs_name")%>" />
         CategoryGroup：
         <select id="categorygroup_select" name="q_cgid">
             <option value="" selected="true">请选择</option>
 	        <%if(cglist!=null){
 				for(CategoryObject obj:cglist){
 			%>
-			<option value="<%=obj.getId()%>"><%=obj.getName()%></option> <%}} %>
+			<option value="<%=obj.getId()%>" <%if((""+obj.getId()).equals(q_cgid)){out.print("selected");} %>> <%=obj.getName()%> </option> <%}} %>
         </select> &nbsp;&nbsp;
-        Assigee: <input type="text" id="q_assignee_login" name="q_assignee_login" size="25" value="" />
-        <input id="submit" type="submit" name="submit" value="搜索" />       
+        Assigee: <input type="text" id="q_assignee_login" name="q_assignee_login" size="25" value="<%=(request.getAttribute("q_assignee_login")==null)?"":request.getAttribute("q_assignee_login")%>" />
+        <input type="button" name="btnsubmit" value="搜索" onclick="javascript:onQuerySubmit(1)"/>     
     </td>
   </tr>
   </form>
@@ -229,7 +255,7 @@ $().ready(function(){
 			<td><%=i%></td>
 			<td nowrap style='width:20px;'><%=obj.getTrackerName()%></td>
 			<td style='width:100px;word-wrap:break-word;word-break:break-all'>
-			<a href="/task/list?fs_id=<%=obj.getFeatureId()%>&view=list"><%=obj.getFeatureName()%></a>
+			<a href="/task/list?q_fs_id=<%=obj.getFeatureId()%>&view=list"><%=obj.getFeatureName()%></a>
 			</td>
 			<td style='width:300px;word-wrap:break-word;word-break:break-all'>
 			<a href="/task/<%=obj.getId()%>/edit" ><%=obj.getSubject()%></a>
@@ -246,18 +272,18 @@ $().ready(function(){
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="4"> <% out.print( "<a href='/task/list?page="+(pr.page-1)+"'>Previous</a> &nbsp;&nbsp;" ); 
+			<td colspan="4"> <% if(pr.page>1)out.print( "<a href='javascript:void(0)' onclick='onQuerySubmit("+(pr.page-1)+")'>Previous</a> &nbsp;&nbsp;" ); 
                for(int i=1;i<pr.page_count;i++){
-            	   if(i!=pr.page) out.print("<a href='/task/list?page="+i+"'>");
+            	   if(i!=pr.page) out.print("<a href='javascript:void(0)' onclick='onQuerySubmit("+i+")'>");
             	   out.print(i);
             	   if(i!=pr.page) out.print("</a>");
             	   out.print(" ,");
                }
-               if(pr.page!=pr.page_count) out.print("<a href='/task/list?page="+pr.page_count+"'>");
+               if(pr.page!=pr.page_count) out.print("<a href='javascript:void(0)' onclick='onQuerySubmit("+pr.page_count+")'>");
               	out.print( pr.page_count);
               	if(pr.page!=pr.page_count) out.print("</a>");
-              	out.print( "&nbsp;&nbsp; <a href='/task/list?page="+(pr.page+1)+"'>Next</a> &nbsp;&nbsp;" );
-              	out.print( pr.count);
+              	if(pr.page<pr.page_count) out.print( "&nbsp;&nbsp; <a href='javascript:void(0)' onclick='onQuerySubmit("+(pr.page+1)+")'>Next</a> &nbsp;&nbsp;" );
+              	out.print( "   【记录总条数："+pr.count +"】");
 			%>
 			</td>
 		</tr>

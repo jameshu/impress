@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -155,8 +156,11 @@ public class TaskController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(HttpServletRequest request,HttpServletResponse response){
 		
-		int page = RequestParameters.getInt(request, "page", 1);
+		int page = RequestParameters.getInt(request, "q_page", 1);
 		int startnum = (page-1)*50;
+		
+		//list or calendar view
+		String view = RequestParameters.getString(request, "view","list" );
 		
 		Map<String,String> map = new HashMap<String,String>();
 		
@@ -164,7 +168,7 @@ public class TaskController {
 		if(q_subject.length()>0){
 			map.put(TaskQueryBuilder.FILTERNAME_subject, ""+q_subject);
 		}
-		int q_fs_id = RequestParameters.getInt(request, "fs_id" ,0);
+		int q_fs_id = RequestParameters.getInt(request, "q_fs_id" ,0);
 		if(q_fs_id!=0){
 			map.put(TaskQueryBuilder.FILTERNAME_feature_id, ""+q_fs_id);
 		}
@@ -182,7 +186,8 @@ public class TaskController {
 		}
 
 		//output result:
-		ModelAndView mav =  new ModelAndView("tasklist");
+		ModelAndView mav =  new ModelAndView("task"+view);
+		
 		TaskDAO taskDAO = BeanLocator.getBean("taskDAO");
 		PageResult<TaskObject> pr = taskDAO.query(startnum, 50, map);
 		pr.page = page;
@@ -201,6 +206,13 @@ public class TaskController {
 		mav.addObject("userlist", userlist);
 		mav.addObject("trackerlist", trackerlist);
 		
+		for (Iterator iterator = request.getParameterMap().keySet().iterator(); iterator.hasNext();) {
+			String kname = (String) iterator.next();
+			if(kname.startsWith("q_")){
+				mav.addObject(kname,request.getParameter(kname));
+			}
+		}
+
 		return mav;
 	}
 	
