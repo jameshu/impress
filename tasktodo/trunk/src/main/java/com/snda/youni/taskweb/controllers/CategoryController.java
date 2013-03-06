@@ -135,7 +135,6 @@ public class CategoryController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			response.setCharacterEncoding("utf-8");
-			String jsonstr = mapper.writeValueAsString(list);
 			OutputStream os = response.getOutputStream();
 			mapper.writeValue(os, list);
 			os.flush();

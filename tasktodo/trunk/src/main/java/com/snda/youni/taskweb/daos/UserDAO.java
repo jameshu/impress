@@ -25,17 +25,25 @@ public class UserDAO extends AbstractDAOImpl {
 			//update user;
 			getJdbcTemplate().update(SQL_UPDATE, user.getLogin(),user.getPassword(),user.getName(),user.getEmail(),user.getLogin());
 		}else{
-			user.setCreateddate( (new Date()).getTime() );
-			getJdbcTemplate().update(SQL_INSERT, user.getLogin(),user.getPassword(),user.getName(),user.getEmail(),user.getCreateddate());
+			//user.setCreateddate( (new Date()).getTime() );
+			getJdbcTemplate().update(SQL_INSERT, user.getLogin(),user.getPassword(),user.getName(),user.getEmail(),new Date());
 			//insert user;
 		}
 		return true;
 	}
 	
 	public UserObject findUserByLogin(String login){
-		UserObject user = getJdbcTemplate().queryForObject(SQL_QUERY_USER_BY_LOGIN, new Object[]{login},new UserMapper());
+		UserObject user = null;
+		try{
+			user= getJdbcTemplate().queryForObject(SQL_QUERY_USER_BY_LOGIN, new Object[]{login},new UserMapper());
+		}catch(Exception e){
+			user = null;
+		}
 		return user;
+		
 	}
+	
+	
 	
 	public List<UserObject> query(){
 		return getJdbcTemplate().query(SQL_QUERY_USER_ALL,new UserMapper());
