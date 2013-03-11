@@ -42,8 +42,22 @@ $().ready(function(){
 	});
 	
 	
-	$('#start_time').timepicker();
-	$('#due_time').timepicker();
+	//$('#start_time').timepicker();
+	//$('#due_time').timepicker();
+	
+	$("#start_datetime").datetimepicker({
+		dateFormat : "yy-mm-dd",
+		//timeOnly : true,
+		timeFormat: "HH:mm",
+		minuteGrid: 15
+	});
+	$("#due_datetime").datetimepicker({
+		dateFormat : "yy-mm-dd",
+		//timeOnly : true,
+		timeFormat: "HH:mm",
+		minuteGrid: 15
+	});
+	
 	
 	//var url = "/featureproject/ajaxsearch";
 	//$("#q_featurename").autocomplete( 
@@ -176,9 +190,12 @@ function onQuerySubmit(pagenum){
     </tr>
     <tr>
       <td>开始时间</td>
-      <td><input name="start_time" id="start_time" size="6" required/>
-                          结束时间
-          <input name="due_time" id="due_time" size="6" required/>
+      <td><input name="start_datetime" id="start_datetime" size="20" required/>
+      </td>
+    </tr>
+    <tr>
+      <td>结束时间</td>
+      <td><input name="due_datetime" id="due_datetime" size="20" required/>
       </td>
     </tr>
     </form>
@@ -207,6 +224,7 @@ function onQuerySubmit(pagenum){
 <table >
   <form id="taskqueryform" method="post" action="/task/list">
   <input type="hidden" id="q_page" name="q_page" value=""/>
+  <input type="hidden" id="q_fs_id" name="q_fs_id" value="<%=q_fs_id%>"/>
   <tr>
     <td>
                      任务名称:<input type="text" name="q_subject" size="15" value="<%=(request.getAttribute("q_subject")==null)?"":request.getAttribute("q_subject")%>"/> &nbsp;&nbsp;

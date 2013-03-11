@@ -18,7 +18,11 @@ TaskObject taskObject = (TaskObject)request.getAttribute("task");
 
 $().ready(function(){
 	
+	
+	
 	$('#commentForm').validate();
+	
+	
 
 	$("#tracker_id_select").CascadingSelect($("#status_id_select"),
 			"/status/json", {
@@ -36,16 +40,26 @@ $().ready(function(){
 				parameter : "categorygroup_id"
 			});
 
-	$("#start_date").datepicker({
-		dateFormat : "yy-mm-dd"
+	$("#start_datetime").datetimepicker({
+		dateFormat : "yy-mm-dd",
+		//timeOnly : true,
+		timeFormat: "HH:mm",
+		minuteGrid: 15
 	});
-	$("#due_date").datepicker({
-		dateFormat : "yy-mm-dd"
+	$("#due_datetime").datetimepicker({
+		dateFormat : "yy-mm-dd",
+		//timeOnly : true,
+		timeFormat: "HH:mm",
+		minuteGrid: 15
 	});
-
-	$('#start_time').timepicker();
-	$('#due_time').timepicker();
+	
+	//$("#start_date").datepicker({dateFormat : "yy-mm-dd"});
+	//$("#due_date").datepicker({	dateFormat : "yy-mm-dd"	});
+	//$('#start_time').timepicker();
+	//$('#due_time').timepicker();
     
+	
+	
 	var nowuser_id = <%=currentuser_id%>;
 	if(nowuser_id!=0){
 		var objSelect = document.getElementById('assignee_id_select');
@@ -162,11 +176,9 @@ $().ready(function(){
 			}
 		}
 	}
-	
-	document.getElementById('start_date').value = '<%=TaskObject.getDateString(taskObject.getStartDate())%>';
-	document.getElementById('start_time').value = '<%=TaskObject.getTimeString(taskObject.getStartDate())%>';
-	document.getElementById('due_date').value = '<%=TaskObject.getDateString(taskObject.getDueDate())%>';
-	document.getElementById('due_time').value = '<%=TaskObject.getTimeString(taskObject.getDueDate())%>';
+
+	document.getElementById('start_datetime').value = '<%=TaskObject.getDatetimeString(taskObject.getStartDate())%>';
+	document.getElementById('due_datetime').value = '<%=TaskObject.getDatetimeString(taskObject.getDueDate())%>';
 	
 	//document.getElementById("submit").disabled=true;
 	//document.getElementById("deletebutton").disabled=true;
@@ -176,7 +188,7 @@ $().ready(function(){
 });
 </script>
 
-<br>
+<div id="content">
 
 <table width="700">
 	<tr>
@@ -268,14 +280,15 @@ $().ready(function(){
 					</tr>
 					<tr>
 						<td>Start Date 【*】:</td>
-						<td><input name="start_date" id="start_date" size="20"
-							required /> Time : <input name="start_time" id="start_time"
-							size="20" /></td>
+						<td><input name="start_datetime" id="start_datetime" size="20"
+							required />
+						</td>
 					</tr>
 					<tr>
 						<td>Due Date 【*】:</td>
-						<td><input name="due_date" id="due_date" size="20" required />
-							Time : <input name="due_time" id="due_time" size="20" /></td>
+						<td><input name="due_datetime" id="due_datetime" size="20"
+							required />
+						</td>
 					</tr>
 				<tr>
 					<td>
@@ -288,5 +301,7 @@ $().ready(function(){
 		<td>
 	</tr>
 </table>
+
+</div>
 
 <%@include file="footer.html" %>

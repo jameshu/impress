@@ -45,8 +45,21 @@ $().ready(function(){
 	});
 	
 	
-	$('#start_time').timepicker();
-	$('#due_time').timepicker();
+	//$('#start_time').timepicker();
+	//$('#due_time').timepicker();
+	
+	$("#start_datetime").datetimepicker({
+		dateFormat : "yy-mm-dd",
+		//timeOnly : true,
+		timeFormat: "HH:mm",
+		minuteGrid: 15
+	});
+	$("#due_datetime").datetimepicker({
+		dateFormat : "yy-mm-dd",
+		//timeOnly : true,
+		timeFormat: "HH:mm",
+		minuteGrid: 15
+	});
 	
 	//var url = "/featureproject/ajaxsearch";
 	//$("#q_featurename").autocomplete( 
@@ -179,9 +192,12 @@ function onQuerySubmit(pagenum){
     </tr>
     <tr>
       <td>开始时间</td>
-      <td><input name="start_time" id="start_time" size="6" required/>
-                          结束时间
-          <input name="due_time" id="due_time" size="6" required/>
+      <td><input name="start_datetime" id="start_datetime" size="20" required/>
+      </td>
+    </tr>
+    <tr>
+      <td>结束时间</td>
+      <td><input name="due_datetime" id="due_datetime" size="20" required/>
       </td>
     </tr>
     </form>

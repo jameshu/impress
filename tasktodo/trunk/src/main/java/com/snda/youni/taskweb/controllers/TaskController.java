@@ -109,21 +109,21 @@ public class TaskController {
 		int assignee_id = RequestParameters.getInt(request, "assignee_id", 0);
 		int categorygroup_id = RequestParameters.getInt(request, "categorygroup_id", 0);
 		int category_id = RequestParameters.getInt(request, "category_id", 0);
-		String start_date = request.getParameter("start_date");
-		String due_date = request.getParameter("due_date");
+		String start_date = request.getParameter("start_datetime");
+		String due_date = request.getParameter("due_datetime");
 		
-		String start_time = RequestParameters.getString(request, "start_time", "");
-		String due_time = RequestParameters.getString(request, "due_time", "");
+		//String start_time = RequestParameters.getString(request, "start_time", "");
+		//String due_time = RequestParameters.getString(request, "due_time", "");
 		
-		start_time = (start_time.length()>0)?start_time + ":00":"00:00:01";
-		due_time = (due_time.length()>0)?due_time + ":00":"00:00:01";
+		//start_time = (start_time.length()>0)?start_time + ":00":"00:00:01";
+		//due_time = (due_time.length()>0)?due_time + ":00":"00:00:01";
 		
 		long startDate = 0;
 		long dueDate = 0;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			startDate = sdf.parse(start_date + " "+start_time).getTime();
-			dueDate = sdf.parse(due_date + " "+due_time).getTime();
+			startDate = sdf.parse(start_date + ":00").getTime();
+			dueDate = sdf.parse(due_date + ":00").getTime();
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}

@@ -6,20 +6,9 @@
 <script language="javascript">
 
 $().ready(function(){
-	$("#listtable").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+	//$("#listtable").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 	
-	$('#fpform').validate({
-		
-		rules:{
-			name:{required:true	},
-			pm:{required:true	}
-		},
-		messages:{
-			name:{required :"FeatureName必须填~~！"},
-			pm:{required :"项目负责人必须填~~！"}
-		} 
-		
-	});
+	$('#commentForm').validate();
 	
 });
 
@@ -48,6 +37,16 @@ function editview(id,name,description,pm,pd){
 }
 </script>
 
+<style type="text/css">
+#fpform label.error {
+	margin-left: 10px;
+	width: auto;
+	display: inline;
+}
+</style>
+
+<div id="content">
+
 <br>
 <br>
 
@@ -55,25 +54,28 @@ function editview(id,name,description,pm,pd){
    List<UserObject> users = (List<UserObject>)request.getAttribute("userlist");
 %>
 
+
+
 <table>
 <form id="fpform" name="fpform" method="post" action="/fsprint/save">
   <tr>
-  <th>
-     Feature创建:
+  <th colspan="2">
+     下面是建立“冲刺【Sprint】”信息，每一个Sprint迭代周期为1~3周，超过3周请新建一个Sprint，谢谢
   </th>
   </tr>
+  <tr><td>&nbsp;</td></tr>
   <tr>
   <td>
-  Feature Name【*】 : 
+  冲刺名称【*】 : 
   </td>
   <td>
-  <input name="name" size="50" type="text"/>  
+  <input id="name" name="name" size="50" type="text" required />  
   <input type="hidden" name="id"/>
   
   </td>
   <tr>
   	<td>
-  	Feature Description
+  	冲刺描述：
   	</td>
   	<td>
   	<textarea name="description" cols="50" rows="5"></textarea>
@@ -82,7 +84,7 @@ function editview(id,name,description,pm,pd){
   </tr>
   <tr>
 	<td>项目负责人 【*】 :</td>
-	<td><select id="pm_select" name="pm" >
+	<td><select id="pm_select" name="pm" required>
 			<option value="" selected="true">请选择</option>
 			<%if(users!=null){ 
 		      	for(UserObject user : users){
@@ -93,7 +95,7 @@ function editview(id,name,description,pm,pd){
 	</td>
   </tr>
   <tr>
-	<td>特性负责人 :</td>
+	<td>产品负责人 :</td>
 	<td><select id="pd_select" name="pd" >
 			<option value="" selected="true">请选择</option>
 			<%if(users!=null){ 
@@ -138,10 +140,15 @@ function editview(id,name,description,pm,pd){
 			<td>
 			<a href="/fsprint/delete/<%=obj.getId()%>" style="margin-left:10px;">删除>>></a>
 			<input type="button" name="edit" value="编辑" onclick="editview('<%=obj.getId()%>','<%=obj.getName()%>','<%=obj.getDescription()%>','<%=obj.getPm()%>','<%=obj.getPd()%>')"/>
+		  
+		  	【<a href="/task/list?q_fs_id=<%=obj.getId()%>" style="margin-left:10px;">列表视图</a>】&nbsp;
+		  	【<a href="/task/list?q_fs_id=<%=obj.getId()%>&view=calendar" style="margin-left:10px;">日历视图</a>】
+		  
 		  </td>
 		</tr>
 		<%} } %>
 </table>  
 
+</div>
 
 <%@include file="footer.html" %>

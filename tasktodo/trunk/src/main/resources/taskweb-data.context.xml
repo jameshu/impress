@@ -16,6 +16,10 @@
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
 	</bean>
 	
+	<bean id="backlogDAO" class="com.snda.youni.taskweb.daos.BacklogDAO">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+	
 	<bean id="fsprintDAO" class="com.snda.youni.taskweb.daos.FeatureSprintDAO">
 		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
 	</bean>

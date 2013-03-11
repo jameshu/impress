@@ -134,6 +134,13 @@ public class TaskObject extends BaseObject {
 		return sdf.format( d );
 	} 
 	
+	public static String getDatetimeString(long time){
+		SimpleDateFormat sdf =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date d = new Date();
+		d.setTime(time);
+		return sdf.format( d );
+	}
+	
 	public static String getTimeString(long time){
 		SimpleDateFormat sdf =  new SimpleDateFormat("HH:mm");
 		Date d = new Date();
