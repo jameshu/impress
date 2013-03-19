@@ -6,6 +6,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.snda.youni.taskweb.beans.IssueType;
+
 public class TaskQueryBuilder {
 
 	private static final Logger logger = LoggerFactory.getLogger(TaskQueryBuilder.class);
@@ -21,9 +23,11 @@ public class TaskQueryBuilder {
 	public final static String FILTERNAME_categorygroup = "categorygroup";
 	public final static String FILTERNAME_category = "category";
 	
+	public final static String FILTERNAME_backlog_id = "backlog_id";
+	
 	public final static String SQL_QUERY_SELECT = 
 			"SELECT * FROM ("+
-				"SELECT DISTINCT T._id,T.feature_id,T.tracker_id,T.subject,T.description,T.assignee,T.status_id,T.categorygroup,T.category,"+
+				"SELECT DISTINCT T._id,T.feature_id,T.tracker_id,T.backlog_id,T.subject,T.description,T.assignee,T.status_id,T.categorygroup,T.category,"+
 				"T.start_date,"+
 				"T.due_date,"+
 				"F.name as feature_name,"+
@@ -40,6 +44,7 @@ public class TaskQueryBuilder {
 				"  AND T.assignee = U._id"+
 				"  AND T.categorygroup = CG._id"+
 				"  AND T.category = C._id "+
+				"  AND T.issuetype <> "+ IssueType.BACKLOG.ordinal()+
 			") AS temptasks ";
 	
 	//private String sql = "";
@@ -96,6 +101,12 @@ public class TaskQueryBuilder {
 				sql_filter = sql_filter +" and "+ "categorygroup="+filters.get(filter);
 				continue;
 			}
+			
+			if(FILTERNAME_backlog_id.equals(filter)){
+				sql_filter = sql_filter +" and "+ "backlog_id="+filters.get(filter);
+				continue;
+			}
+			
 		}
 		if(sql_filter.length()>0){
 			sql_filter = sql_filter.substring(5);

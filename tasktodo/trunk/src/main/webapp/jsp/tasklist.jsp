@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="header.jsp" %>
+<%@include file="subbar_myissues.jsp" %>
 <%@page import="com.snda.youni.taskweb.beans.*" %>
 <%@page import="com.snda.youni.taskweb.util.JsonUtil" %>
 <%@page import="java.util.*" %>
@@ -31,8 +32,11 @@ if(request.getAttribute("q_fs_id")!=null){
 
 <script type="text/javascript">
 
+
+
 $().ready(function(){
 	
+	/*
 	$("#tracker_id_select").CascadingSelect($("#status_id_select"),
 			"/status/json", {
 				datatype : "json",
@@ -41,30 +45,21 @@ $().ready(function(){
 				parameter : "tracker_id"
 	});
 	
-	
-	//$('#start_time').timepicker();
-	//$('#due_time').timepicker();
-	
 	$("#start_datetime").datetimepicker({
 		dateFormat : "yy-mm-dd",
 		//timeOnly : true,
 		timeFormat: "HH:mm",
 		minuteGrid: 15
 	});
+	
 	$("#due_datetime").datetimepicker({
 		dateFormat : "yy-mm-dd",
 		//timeOnly : true,
 		timeFormat: "HH:mm",
 		minuteGrid: 15
 	});
+	*/
 	
-	
-	//var url = "/featureproject/ajaxsearch";
-	//$("#q_featurename").autocomplete( 
-	//		{ 
-	//		source: url 
-	//		} 
-	//);
 	
 	var availableTags = [];
 	var usersStr = '<%=JsonUtil.toJsonString(userlist)%>';
@@ -73,7 +68,6 @@ $().ready(function(){
 	for(var i=0;i<userobjs.length;i++){
 		availableTags.push( userobjs[i].login );
 	}
-	//alert(availableTags);
 	
 	function split( val ) {
 	    return val.split( /,\s*/ );
@@ -81,7 +75,7 @@ $().ready(function(){
 	function extractLast( term ) {
 	    return split( term ).pop();
 	}
-	 
+
     $( "#q_assignee_login" )
       // don't navigate away from the field on tab when selecting an item
       .bind( "keydown", function( event ) {
@@ -138,6 +132,8 @@ $().ready(function(){
 	
 	$("#tasklisttable").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 	
+
+	
 });
 
 function onQuerySubmit(pagenum){
@@ -145,9 +141,16 @@ function onQuerySubmit(pagenum){
 	$("#taskqueryform").submit();
 }
 
+function onIssueEditDialog(id){
+	divIssueEditDialog.load("/task/"+id+"/edit");
+	divIssueEditDialog.dialog("open");
+	
+	
+}
+
 </script>
 
-<div id="main" class="">
+<div id="main">
 
 <div id="sidebar">
 
@@ -155,6 +158,7 @@ function onQuerySubmit(pagenum){
   <a href="/task/list?q_fs_id=<%=q_fs_id%>&view=calendar">日历视图</a>
   <%} %>
 
+<!--
   <table class="cloth">
     <form id="newtaskform" method="post" action="/task/save">
     <tr>
@@ -200,7 +204,7 @@ function onQuerySubmit(pagenum){
     </tr>
     </form>
   </table>
-  
+  -->   
   <table id="doingtable" class="cloth">
     <tr>
 	    <th>我在处理的任务（名称）</th>
@@ -216,7 +220,7 @@ function onQuerySubmit(pagenum){
       <td>&nbsp;  </td>
     </tr>
   </table>
-  
+ 
 </div>
 
 <div id="content">
@@ -276,7 +280,10 @@ function onQuerySubmit(pagenum){
 			<a href="/task/list?q_fs_id=<%=obj.getFeatureId()%>&view=list"><%=obj.getFeatureName()%></a>
 			</td>
 			<td style='width:300px;word-wrap:break-word;word-break:break-all'>
+			<!-- 
 			<a href="/task/<%=obj.getId()%>/edit" ><%=obj.getSubject()%></a>
+			-->
+			<a href="javascript:void(0)" onclick="onIssueEditDialog(<%=obj.getId()%>)"><%=obj.getSubject()%></a>
 			</td>
 			<td nowrap><%=obj.getAssigeeName()%></td>
 			<td  nowrap class="<%out.print( (obj.getStatusState()==1)?"wordblue":"" );%>"><%=obj.getStatusName() %></td>
@@ -311,6 +318,5 @@ function onQuerySubmit(pagenum){
 </div>
 
 </div>
-
 
 <%@include file="footer.html" %>

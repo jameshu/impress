@@ -1,10 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@include file="header.jsp" %>
+<%@include file="js_jqueryui.html" %>
+<script src="/js/jquery.form.js"></script> 
 <%@page import="com.snda.youni.taskweb.beans.*" %>
 <%@page import="com.snda.youni.taskweb.util.*" %>
 <%@page import="java.util.List" %>
 
 <%
+String requestURL = request.getRequestURL().toString();
+
+CurrentUserCookie cuc = new CurrentUserCookie(request);
+String currentuser_login = cuc.userLogin;
+int currentuser_id = cuc.userId;
+
+
 List<FeatureSprintObject> fsprintlist = (List<FeatureSprintObject>)request.getAttribute("fsprintlist");
 List<TrackerObject> trackerlist = (List<TrackerObject>)request.getAttribute("trackerlist");
 List<UserObject> userlist = (List<UserObject>)request.getAttribute("userlist");
@@ -185,25 +193,26 @@ $().ready(function(){
 
 	<%}%>	
 	
+	
+	$('#taskform').ajaxForm(function() {
+		
+        alert("保存成功"); 
+        divIssueEditDialog.dialog('close');
+    }); 
+	
 });
 </script>
 
-<div id="content">
-
-<table width="700">
+<table>
 	<tr>
 		<td>
-
 			<table class="cloth">
 				<form class="taskform" id="taskform" method="post"	action="/task/save">
 				    <%if(taskObject!=null){ %>
 				    <input type="hidden" name="task_id" value="<%=taskObject.getId()%>"/>
 				    <%} %>
 					<tr>
-						<th>Task创建:</th>
-						<td align="right">
-						  <input type="button" name="编辑" value="编辑" onclick="edit()" />
-						</td>
+						<th colspan="2">Task创建:</th>
 					</tr>
 					<tr>
 					<tr>
@@ -291,9 +300,8 @@ $().ready(function(){
 						</td>
 					</tr>
 				<tr>
-					<td>
+					<td colspan="2">
 						<input id="submit" class="submit" type="submit" name="submit" value="保存" />
-						<input id="deletebutton" type="button" name="deletebutton" value="删除" />
 					</td>
 				</tr>
 				</form>
@@ -301,7 +309,3 @@ $().ready(function(){
 		<td>
 	</tr>
 </table>
-
-</div>
-
-<%@include file="footer.html" %>

@@ -1,22 +1,24 @@
 package com.snda.youni.taskweb.controllers;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.snda.iyouni.icommon.spring.BeanLocator;
+import com.snda.youni.taskweb.beans.BacklogObject;
 import com.snda.youni.taskweb.beans.FeatureSprintObject;
-import com.snda.youni.taskweb.beans.StatusObject;
 import com.snda.youni.taskweb.beans.UserObject;
+import com.snda.youni.taskweb.daos.BacklogDAO;
 import com.snda.youni.taskweb.daos.FeatureSprintDAO;
-import com.snda.youni.taskweb.daos.StatusDAO;
 import com.snda.youni.taskweb.daos.UserDAO;
 import com.snda.youni.taskweb.util.RequestParameters;
 
@@ -81,5 +83,81 @@ public class FeatureSprintController {
 		}
 		return null;
 	}
+	
+	/**
+	 * Use to show what adding backlogs to sprint page.
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/backlogbingding")
+	public ModelAndView backlog(HttpServletRequest request,HttpServletResponse response){
+		
+		int backlog_id = RequestParameters.getInt(request, "backlog_id", -1);
+		
+		FeatureSprintDAO fsprintDAO = BeanLocator.getBean("fsprintDAO");
+		List<FeatureSprintObject> fsprintlist = fsprintDAO.query();
+		
+		ModelAndView mav = new ModelAndView("sprintbacklog");
+		mav.addObject("backlog_id", backlog_id);
+		mav.addObject("fsprintlist",fsprintlist);
+		return mav;
+		
+	}
+	
+	@RequestMapping(value="/{id}/backloglist")
+	public ModelAndView backloglist(@PathVariable int id,HttpServletRequest request,HttpServletResponse response){
+		
+		int backlog_id = RequestParameters.getInt(request, "backlog_id", -1);
+		
+		BacklogDAO backlogDAO = BeanLocator.getBean("backlogDAO");
+		List<BacklogObject> backlogs = backlogDAO.queryBySprint(id);
+		
+		FeatureSprintDAO fsprintDAO = BeanLocator.getBean("fsprintDAO");
+		List<FeatureSprintObject> fsprintlist = fsprintDAO.query();
+		
+		ModelAndView mav = new ModelAndView("sprintbacklog_list");
+		mav.addObject("backlog_id", backlog_id);
+		mav.addObject("fsprintlist",fsprintlist);
+		mav.addObject("backloglist",backlogs);
+		return mav;
+		
+	}
+	
+//	@RequestMapping(value="/{id}/backlog/save")
+//	public ModelAndView backlogsave(@PathVariable int id,HttpServletRequest request,HttpServletResponse response){
+//		
+//		int backlog_id = RequestParameters.getInt(request, "backlog_id", -1);
+//		
+//		BacklogDAO backlogDAO = BeanLocator.getBean("backlogDAO");
+//		backlogDAO.setSprint(backlog_id, id);
+//		
+//		try {
+//			response.setCharacterEncoding("utf-8");
+//			response.getWriter().append("{\"status\":\"200\"}");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//		
+//	}
+	
+	@RequestMapping(value="/listjson")
+	public ModelAndView listjson(HttpServletRequest request,HttpServletResponse response){
+		
+		FeatureSprintDAO dao = BeanLocator.getBean("fsprintDAO");
+		List<FeatureSprintObject> fsprintlist = dao.query();
+		
+		try {
+			response.setCharacterEncoding("utf-8");
+			OutputStream os = response.getOutputStream();
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(os, fsprintlist);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 		
 }

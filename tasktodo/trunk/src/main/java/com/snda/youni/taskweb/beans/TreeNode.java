@@ -14,6 +14,7 @@ public class TreeNode {
 	//private List<TreeNode> children = new ArrayList<TreeNode>();
 	
 	private String state = "closed"; //open
+	private String icon = "/";  //folder
 
 	public String getData() {
 		return data;
@@ -75,6 +76,16 @@ public class TreeNode {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+
+	public String getIcon() {
+		return icon;
+	}
+
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	

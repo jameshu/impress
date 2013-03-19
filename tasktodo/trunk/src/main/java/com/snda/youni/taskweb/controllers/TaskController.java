@@ -144,8 +144,11 @@ public class TaskController {
 		TaskDAO taskDAO = BeanLocator.getBean("taskDAO");
 		taskDAO.save(obj);
 		
+		
 		try {
-			response.sendRedirect("/task/list");
+			//response.sendRedirect("/task/list");
+			response.setCharacterEncoding("utf-8");
+			response.getWriter().append("{\"status\":\"200\"}");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

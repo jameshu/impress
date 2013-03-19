@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="header.jsp" %>
 <%@page import="com.snda.youni.taskweb.beans.*" %>
-<%@page import="com.snda.youni.taskweb.util.*" %>
 <%@page import="java.util.List" %>
 
 <%
-int id = (Integer)request.getAttribute("id");
-List<TreeNode> nodes = (List<TreeNode>)request.getAttribute("nodes");
+List<FeatureSprintObject> fsprintlist = (List<FeatureSprintObject>)request.getAttribute("fsprintlist");
+int id = (Integer)request.getAttribute("backlog_id");
 %>
 
 <style type="text/css">
@@ -25,6 +24,16 @@ List<TreeNode> nodes = (List<TreeNode>)request.getAttribute("nodes");
 	border:1px solid gray; 
 	background:white; 
 	overflow:auto; }
+	
+.sprintbacklogsdiv { 
+	width:495px;
+	height:300px; 
+	float:left; 
+	margin:0; 
+	border:1px solid gray; 
+	background:white; 
+	overflow:auto; }	
+	
 </style>
 
 <script language="javascript">
@@ -35,14 +44,13 @@ var selected_backlog_id = -1;
 $().ready(function(){
 	$.ajaxSetup({cache:false});
 	$("#demo1").jstree({
-		"plugins" : [ "themes", "json_data","ui","crrm","contextmenu","dnd","search" ],
+		"plugins" : [ "themes", "json_data","ui","crrm","contextmenu","dnd" ],
 		"themes" : {  
             "theme" : "default", //apple,default,if in ie6 recommented you use classic  
             "dots" : true,  
             "icons" : true  
       	},
 		"json_data" : {
-			"data":<%=(nodes!=null)?JsonUtil.toJsonString(nodes):""%>,
 			"ajax":{
 				"url":"/backlog/treechildren",
 				"data":function(n){
@@ -54,23 +62,33 @@ $().ready(function(){
 			}
 			
 		},
-		"ui" : {
-			"initially_select" : [ "204" ]
-
-		},
       	"core":{
-      		"initially_load":["204"]
-      		
+      		"initially_open":["0"]
       	},
       	"dnd":{
       		"drop_target" : "#tabs",
       		"drag_target" : false,
       		"drop_finish" : function (data) {
-                alert("test : "+data.o.attr("id"));
+      			//when this backlog has been drag into sprint div, binging it to this sprint.
+      			//alert("test : "+data.o.attr("id"));
+      			var selectedObj = $("#sprint_id_select option:selected");  
+        		var selected = selectedObj.get(0).value; 
+        		var url = "/backlog/"+data.o.attr("id")+"/bindSprint";
+        		$.ajax({
+        			type:"POST",
+        			url:url,
+        			data:{
+        				"sprint_id":selected
+        			},
+        			success:function (r) {
+        				var url = "/fsprint/"+selected+"/backloglist";
+        	        	$("#sprintbacklogsdiv").load(url);
+        			}
+        		});
+        		
+                
             }
       	}
-	}).bind("loaded.jstree", function (e, data) {
-		//data.inst.open_all(-1);
 	}).bind("select_node.jstree", function (e, data) { 
 		//select node action
 		selected_backlog_id = data.rslt.obj.attr("id");
@@ -140,6 +158,34 @@ $().ready(function(){
 	});
 
 	
+	var sprintSelect = $("#sprint_id_select");
+    $.ajax({  
+        type: "POST",  
+        dataType: "json",  
+        url: "/fsprint/listjson",  
+        data: {},  
+        success: function (data) {  
+            sprintSelect.empty();
+            $("<option value=''></option>").appendTo(sprintSelect);
+            $.each(data, function (i, n) {  
+                $("<option value=" + n.id + ">" + n.name + "</option>").appendTo(sprintSelect);  
+            });  
+        }  
+    }); 
+	
+	$("#sprint_id_select").change( function(){
+		var selectedObj = $("#sprint_id_select option:selected");  
+		//alert(selectedObj.get(0).text);
+        var selected = selectedObj.get(0).value; 
+        if(selected){
+        //ajax get backlog list for this sprint, and render the box.
+        	var url = "/fsprint/"+selected+"/backloglist";
+        	//alert(url);
+        	$("#sprintbacklogsdiv").load(url);
+		}
+        
+	});
+	
 });
 
 
@@ -170,24 +216,30 @@ function onBtnClick_BacklogForm(){
 			tree.refresh();
 		}
 	});
-}
-
-function onToRootNode(){
-	location.href ="/backlog";
-}
-
-function onToParentNode(){
+	
+	
 	
 }
 
-function onToSelectedNode(){
-	location.href ="/backlog/"+selected_backlog_id;
+function onUnBind(backlog_id){
+	//alert("remove backlog id : "+backlog_id);
+	
+	var urlstr = "/backlog/"+backlog_id+"/unbindSprint";
+	$.ajax({
+		type:"POST",
+		url:urlstr,
+		data:{
+			"sprint_id":"1"
+		},
+		success:function (r) {
+			var selectedObj = $("#sprint_id_select option:selected");  
+			var selected = selectedObj.get(0).value; 
+			var url = "/fsprint/"+selected+"/backloglist";
+        	$("#sprintbacklogsdiv").load(url);
+		}
+	});
 }
 
-function onNodeSearch(){
-	var s = document.getElementById('search_name').value;
-	$("#demo1").jstree("search",s);
-}
 
 </script>
 
@@ -196,44 +248,26 @@ function onNodeSearch(){
 <div id="content">
 
 <table>
-<tr>
-	<td><a href='javascript:void(0)' onclick='onToRootNode()'>返回顶节点</a>  --> 
-		<a href='javascript:void(0)' onclick='onToSelectedNode()'>当前选择节点</a>
-		&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="text" id="search_name" name="search_name" size="20"/>
-		<input type="button" name="savebutton" value="search" onclick="onNodeSearch()"/>
-	</td>
-	<td></td>
-</tr>
+
 <tr>
 	<td width="550px" style="vertical-align: top;">
 		<div id="demo1" class="treediv"></div>
 	</td>
 	<td style="vertical-align: top;">
-
-			<table>
-			    <form id="backlogform" name="backlogform" method="post" action="/backlog/save">
-			    <tr>
-	       			<td>ID</td>
-	       			<td><input type="text" id="backlog_id" name="id" size="50" readonly/></td>
-	       		</tr>
-	       		<tr>
-	       			<td>名称</td>
-	       			<td><input type="text" id="backlog_name" name="name" size="50"/></td>
-	       		</tr>
-	       		<tr>
-	       			<td>描述</td>
-	       			<td><textarea id="backlog_description" name="description" cols="50" rows="5"></textarea></td>
-	       		</tr>
-	       		<tr>
-	       			<td>Link</td>
-	       			<td><textarea id="backlog_link" name="link" cols="50" rows="3"></textarea>
-	       			    <input type="button" name="savebutton" value="Save" onclick="onBtnClick_BacklogForm()"/>
-	       			</td>
-	       		</tr>
-	       		</form>
-	       </table>
 	
+	
+	<div id="tabs" class="itemdiv">
+	
+		选择冲刺：
+   <select id="sprint_id_select" name="feature_id">
+		<option value=""></option>
+   </select>	
+
+		<div id="sprintbacklogsdiv" class="sprintbacklogsdiv">
+		</div>
+
+	</div>
+
 	</td>
 </tr>
 

@@ -5,66 +5,84 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>TaskWeb-</title>
-<link rel="stylesheet" href="/css/mainLayer.css" />
-<!--[if IE]>
-<style type="text/css"> 
-.twoColLiqLtHdr #sidebar1 { padding-top: 30px; }
-.twoColLiqLtHdr #mainContent { zoom: 1; padding-top: 15px; }
-</style>
-<![endif]-->
-<!-- 
-<script src="http://dl.y.sdo.com/ystatic/common/jquery/1.7.1.min.js"></script>
-<script src="http://dl.y.sdo.com/ystatic/common/jquery/jquery-ui-1.8.18.min.js"></script>
-<script src="http://dl.y.sdo.com/ystatic/common/jquery/jquery.upload-1.0.2.min.js"></script>
-<script src="http://dl.y.sdo.com/ystatic/common/jquery/jquery-ui-timepicker-addon.js"></script>
-<link rel="stylesheet" href="http://dl.y.sdo.com/ystatic/common/jquery/plugin/datepicker-themes/base/jquery.ui.all.css">
-<link rel="stylesheet" href="/css/demos.css">
- -->
+<title>impressTodo-</title>
+<link rel="stylesheet"	href="/css/application.css" />
 
+<%
+String js = (String)request.getParameter("js");
+if(js==null || js.length()==0){
+	js = "jqueryui";
+}
+%>
+<%if("jqueryui".equals(js)){%>	
+<%@include file="js_jqueryui.html" %>
+<% }else{%>
+<%@include file="js_easyui.html" %>
+<%} %>
 
+<script type="text/javascript">
+
+var divIssueEditDialog;
+
+$().ready(function(){
+	var currentURL = window.location.href;
+	if(currentURL.indexOf("/task")>0){
+		if(currentURL.indexOf("/task/new")>0){
+			$("#a_gtb_newissue").attr("class","tab active");
+		}else if(currentURL.indexOf("/task/me")>0){
+			$("#a_gtb_myissues").attr("class","tab active");
+		}else if(currentURL.indexOf("/task/list")>0){
+			$("#a_gtb_issues").attr("class","tab active");
+		}else{
+			$("#a_gtb_issues").attr("class","tab active");
+		}
+	}else if(currentURL.indexOf("/fsprint/list")>0){
+		$("#a_gtb_sprints").attr("class","tab active");
+	}else{
+		$("#a_gtb_admin").attr("class","tab active");
+	}
+	
+	//I have to use gloabl var to close dialog.
+	divIssueEditDialog = $( "#issueDialog" );
+	divIssueEditDialog.dialog({
+	      autoOpen: false,
+	      height: 530,
+	      width: 650,
+	      modal: true,
+	      buttons: {
+	    	  "关闭":function(){
+	    		  divIssueEditDialog.dialog('close')
+	    	  }
+	      }
+	});
+	
+	
+});
+
+function onIssueAddDialog(){
+	divIssueEditDialog.load("/task/new");
+	divIssueEditDialog.dialog("open");
+	//
+	
+}
+
+</script>
  
-<link rel="stylesheet"	href="/js/jquery/ui/1.9.2/themes/base/jquery-ui.css" />
-<link rel="stylesheet"	href="/css/application.css" />	
+<style type="text/css">
+.gtb{background:#ebeff9;border-bottom:1px solid #6b90da;padding:5px 10px 0 5px;white-space:nowrap}
+.gtb .tab{color:#00c;cursor:pointer;float:left;margin:5px 15px 6px 10px}
+.gtb .active{background:#fff;border:1px solid #6b90da;border-bottom:0;color:#000;cursor:default;font-weight:bold;margin:0 5px -1px 0;padding:5px 9px 6px;text-decoration:none}
+.gtb .gtbc{clear:left}
 
-<script src="/js/jquery/jquery-1.9.1.min.js"></script>   
-<script src="/js/jquery/ui/1.9.2/jquery-ui.js"></script>
-
-
-<script type="text/javascript" src="/js/jquery.validate/1.11.0/jquery.validate.js"></script>
-
-<!-- JQuery TimePicker Addon plugin,  need to include jQuery and jQuery UI with datepicker and slider wigits  -->
-<script type="text/javascript" src="/js/timepicker/jquery-ui-timepicker-addon.js"></script>
-<link rel="stylesheet" href="/js/timepicker/jquery-ui-timepicker-addon.css" />
-
-<link rel="stylesheet" href="/js/tablecloth/tablecloth.css" />
-<script type="text/javascript" src="/js/tablecloth/tablecloth.js"></script>
-
-<link rel="stylesheet" href="/js/tablesorter/style.css" />
-<script type="text/javascript" src="/js/tablesorter/jquery.tablesorter.js"></script>
-
-<script type="text/javascript" src="/js/jQuery.FillOptions.js"></script>
-<script type="text/javascript" src="/js/jQuery.CascadingSelect.js"></script>
-
-<!-- 
-<script type="text/javascript" src="/js/jstree/jquery.js"></script>
- -->
-
-<script type="text/javascript" src="/js/jstree/jquery.jstree.js"></script>
-<script type="text/javascript" src="/js/jstree/jquery.cookie.js"></script>
-<script type="text/javascript" src="/js/jstree/jquery.hotkeys.js"></script>
-<link rel="stylesheet"	href="/js/jstree/themes/classic/style.css" />	
-
-<link type="text/css" rel="stylesheet" href="/js/jstree/_docs/syntax/!style.css"/>
-<script type="text/javascript" src="/js/jstree/_docs/syntax/!script.js"></script>
-<link rel="stylesheet" type="text/css" href="/js/jstree/_docs/!style.css" />
-
-
-
+.subt{background:#fff;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',endColorstr='#f1f1f1');background:-webkit-gradient(linear,left top,left bottom,from(#fff),to(#f1f1f1));background:-moz-linear-gradient(top,#fff,#f1f1f1);border-bottom:1px solid #ccc;padding:0 0 0 14px;height:33px}
+.st1 .inst1 a,.st2 .inst2 a,.st3 .inst3 a,.st4 .inst4 a,.st5 .inst5 a,.st6 .inst6 a,.st7 .inst7 a,.st8 .inst8 a,.st9 .inst9 a{color:#000;font-weight:bold;text-decoration:none;height:20px}
+</style>
+ 
 </head>
 
 <%
-  
+  String requestURL = request.getRequestURL().toString();
+
   CurrentUserCookie cuc = new CurrentUserCookie(request);
   String currentuser_login = cuc.userLogin;
   int currentuser_id = cuc.userId;
@@ -75,22 +93,66 @@
 <body>
 
 <div id="top-menu">
-   <a href="/">taskTodo System</a>
-   <div id="loggedas">Logged in as <a href="#"><%=currentuser_login%></a></div>
+   <a href="/">impressTodo</a>
+   <div id="loggedas">
+   
+   
+   Logged in as <a href="#"><%=currentuser_login%></a>
+   </div>
 </div>
 
+<!--
 <div id="header">
 	<a href="/task/new" ><b>创建任务</b> </a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+	<a href="/task/me">MyTasks</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+	
+	<a href="/backlog" >功能需求</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+	
+	<a href="/fsprint/list" >冲刺阶段</a> &nbsp;&nbsp;&nbsp; 
+	<a href="/fsprint/backlogbingding" >冲刺需求</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+	
+	<a href="/fsprint/tasks" >冲刺任务</a> &nbsp;&nbsp;&nbsp;
 	<a href="/task/list" >任务列表</a> &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; 
-    <a href="/fsprint/list" >目标冲刺</a> &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; 
-    <a href="/task/me">MyTasks</a>
-    </td>
-    <td style="margin-right: 12px;">    
-    <a href="/tracker/list" style="margin-left: 12px;">Trackers</a> , 
-    <a href="/status/list" style="margin-left: 12px;">Status</a> , 
-    <a href="/category/grouplist">CategoryGroups</a> , 
-    <a href="/category/list" style="margin-left: 12px;">Categorys</a> , 
-    <a href="/user/list" style="margin-left: 12px;">Users</a>
-
-
 </div>
+  -->
+<div id="mt" class="gtb"> 
+ <a id="a_gtb_newissue" href="javascript:void(0)" class="tab " onclick="onIssueAddDialog()">New Issue</a>
+ <a id="a_gtb_myissues" href="/task/me" class="tab ">My Issues</a>
+ <a id="a_gtb_backlogs" href="#" class="tab ">Backlogs</a>
+ <a id="a_gtb_sprints" href="/fsprint/list" class="tab ">Sprints</a>
+ <a id="a_gtb_issues" href="/task/list" class="tab ">Issues[All]</a>
+ <a id="a_gtb_admin" href="/tracker/list" class="tab ">Admin</a>
+ <div class=gtbc></div>
+</div>
+<!--
+<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" class="st">
+ <tr>
+ <td class="subt">
+ <div class="st1">
+ <div class="isf">
+ <span class="inst1">
+ <a href="/p/jquery-column-navigator/">Summary</a>
+ </span>
+ 
+ 
+ 
+ &nbsp;
+ <span class="inst3">
+ <a href="/p/jquery-column-navigator/people/list">People</a>
+ </span>
+ 
+ 
+ </div>
+</div>
+
+ </td>
+ 
+ 
+ <td align="right" valign="top" class="bevel-right"></td>
+ </tr>
+</table>
+  -->
+
+<div id="issueDialog" title="Edit Issus">
+</div>  
+  

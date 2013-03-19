@@ -10,6 +10,8 @@ public class TaskObject extends BaseObject {
 	private int featureId;
 	private int trackerId;
 	private int statusId;
+	private int backlogId;
+	
 	private String subject;
 	private int assignee;
 	private long startDate;
@@ -21,6 +23,8 @@ public class TaskObject extends BaseObject {
 	private String trackerName;
 	private int statusState;
 	private String statusName;
+	private String backlogName;
+	
 	private String assigeeName;
 	private String assigeeLogin;
 	private String categorygroupName;
@@ -152,6 +156,18 @@ public class TaskObject extends BaseObject {
 	}
 	public void setStatusState(int statusState) {
 		this.statusState = statusState;
+	}
+	public int getBacklogId() {
+		return backlogId;
+	}
+	public void setBacklogId(int backlogId) {
+		this.backlogId = backlogId;
+	}
+	public String getBacklogName() {
+		return backlogName;
+	}
+	public void setBacklogName(String backlogName) {
+		this.backlogName = backlogName;
 	} 
 	
 
