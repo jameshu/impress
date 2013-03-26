@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.snda.iyouni.icommon.context.AppSettings;
+import com.snda.youni.taskweb.common.AppSettings;
 
 public class UserCookieFilter extends OncePerRequestFilter {
 

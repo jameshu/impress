@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.snda.iyouni.icommon.spring.BeanLocator;
 import com.snda.youni.taskweb.beans.CategoryObject;
 import com.snda.youni.taskweb.beans.FeatureSprintObject;
 import com.snda.youni.taskweb.beans.PageResult;
 import com.snda.youni.taskweb.beans.TaskObject;
 import com.snda.youni.taskweb.beans.TrackerObject;
 import com.snda.youni.taskweb.beans.UserObject;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.CategorygroupDAO;
 import com.snda.youni.taskweb.daos.FeatureSprintDAO;
 import com.snda.youni.taskweb.daos.TaskDAO;
@@ -34,6 +34,11 @@ import com.snda.youni.taskweb.daos.UserDAO;
 import com.snda.youni.taskweb.util.CurrentUserCookie;
 import com.snda.youni.taskweb.util.RequestParameters;
 
+
+/*
+ * There are three return tasks views: json, list , calendar , kanban . 
+ * parameter use "rview" .
+ */
 @Controller
 @RequestMapping("/task")
 public class TaskController {
@@ -95,6 +100,22 @@ public class TaskController {
 		mav.addObject("cglist", cglist);
 		mav.addObject("task",toEditTask);
 		return mav;
+	}
+	
+	@RequestMapping(value="/{taskid}/updatestatus")
+	public ModelAndView updatestatus(@PathVariable int taskid,HttpServletRequest request,HttpServletResponse response){
+		int status_id = RequestParameters.getInt(request, "status_id", 0);
+		
+		TaskDAO taskDAO = BeanLocator.getBean("taskDAO");
+		taskDAO.updateStatus(taskid, status_id);
+		
+		try {
+			response.setCharacterEncoding("utf-8");
+			response.getWriter().append("{\"status\":\"200\"}");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	@RequestMapping(value="/save")
@@ -222,17 +243,19 @@ public class TaskController {
 	@RequestMapping(value="/me")
 	public ModelAndView me(HttpServletRequest request,HttpServletResponse response){
 		
+		String rview = RequestParameters.getString(request, "rview", "kanban");
+		CurrentUserCookie cuc = new CurrentUserCookie(request);
+		
+		String q_status_state = RequestParameters.getString(request, "q_status_state", "");
+		
 		int page = RequestParameters.getInt(request, "page", 1);
 		int startnum = (page-1)*50;	
-		String rtype = RequestParameters.getString(request, "rtype", "");
-
-		CurrentUserCookie cuc = new CurrentUserCookie(request);
 
 		Map<String,String> map = new HashMap<String,String>();
 		map.put(TaskQueryBuilder.FILTERNAME_assignee, ""+cuc.userId);
 		
-		int q_status_state = RequestParameters.getInt(request, "q_status_state", -1);
-		if(q_status_state!=-1){
+		
+		if(q_status_state.length()>0){
 			map.put(TaskQueryBuilder.FILTERNAME_status_state, ""+q_status_state);
 		}
 
@@ -240,13 +263,11 @@ public class TaskController {
 		PageResult<TaskObject> pr = taskDAO.query(startnum, 50, map);
 		pr.page = page;
 		
-		if(rtype.length()==0){
-		
+		if(rview.equals("list")){
 			ModelAndView mav =  new ModelAndView("tasklist");
 			mav.addObject("tasklist_pr",pr);
-		
-		return mav;}else{
-		
+			return mav;
+		}else if(rview.equals("json")){
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				response.setCharacterEncoding("utf-8");
@@ -260,8 +281,30 @@ public class TaskController {
 				e.printStackTrace();
 			}
 			return null;
+		}else if(rview.equals("kanban")){
+			map.clear();
+			map.put(TaskQueryBuilder.FILTERNAME_assignee, ""+cuc.userId);
+			map.put(TaskQueryBuilder.FILTERNAME_status_state, "0");
+
+			List<TaskObject> list_todo = taskDAO.queryForList(0, 15, map);
+			
+			map.put(TaskQueryBuilder.FILTERNAME_status_state, "1");
+			List<TaskObject> list_doing = taskDAO.queryForList(0, 15, map);
+
+			map.put(TaskQueryBuilder.FILTERNAME_status_state, "2");
+			List<TaskObject> list_done = taskDAO.queryForList(0, 15, map);
+			
+			map.put(TaskQueryBuilder.FILTERNAME_status_state, "3");
+			List<TaskObject> list_killed = taskDAO.queryForList(0, 15, map);
+			
+			ModelAndView mav =  new ModelAndView("tasks_kanban");
+			mav.addObject("tasklist_todo",list_todo);
+			mav.addObject("tasklist_doing",list_doing);
+			mav.addObject("tasklist_done",list_done);
+			mav.addObject("tasklist_killed",list_killed);
+			return mav;
 		}
-		
+		return null;
 	}
 	
 }

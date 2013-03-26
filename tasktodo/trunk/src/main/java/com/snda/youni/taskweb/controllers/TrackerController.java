@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.snda.iyouni.icommon.spring.BeanLocator;
-import com.snda.youni.taskweb.beans.CategoryObject;
 import com.snda.youni.taskweb.beans.TrackerObject;
-import com.snda.youni.taskweb.daos.CategorygroupDAO;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.TrackerDAO;
 import com.snda.youni.taskweb.util.RequestParameters;
 
@@ -23,7 +21,7 @@ import com.snda.youni.taskweb.util.RequestParameters;
 public class TrackerController {
 
 	@RequestMapping(value="/list")
-	public ModelAndView grouplist(HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView list(HttpServletRequest request,HttpServletResponse response){
 		
 		TrackerDAO dao = BeanLocator.getBean("trackerDAO");
 		List<TrackerObject> list = dao.query();
@@ -56,7 +54,7 @@ public class TrackerController {
 	}
 	
 	@RequestMapping(value="/delete/{id}")
-	public ModelAndView groupdelete(@PathVariable int id,HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView delete(@PathVariable int id,HttpServletRequest request,HttpServletResponse response){
 		
 		TrackerDAO dao = BeanLocator.getBean("trackerDAO");
 		dao.delete(id);

@@ -2,7 +2,7 @@ package com.snda.youni.taskweb;
 
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 
-import com.snda.iyouni.icommon.context.AppSettings;
+import com.snda.youni.taskweb.common.AppSettings;
 
 public class WebConnector extends SelectChannelConnector {
 

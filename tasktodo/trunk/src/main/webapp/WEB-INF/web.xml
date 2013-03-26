@@ -14,7 +14,7 @@
 	</context-param>
 
 	<listener>
-		<listener-class>com.snda.iyouni.icommon.spring.SpringInitListener</listener-class>
+		<listener-class>com.snda.youni.taskweb.common.SpringInitListener</listener-class>
 	</listener>
 
 	<filter>

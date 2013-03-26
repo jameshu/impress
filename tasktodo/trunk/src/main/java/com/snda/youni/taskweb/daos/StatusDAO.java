@@ -15,9 +15,11 @@ public class StatusDAO extends AbstractDAOImpl {
 	}
 	public final static String SQL_INSERT = "insert into "+TABLENAME+" (name,state,tracker_id) value (?,?,?)";
 	public final static String SQL_UPDATE = "update "+TABLENAME+" set name=?,state=?,tracker_id=? where _id=?";
-	private final static String SQL_QUERY_ALL = "SELECT distinct A._id,A.name, A.state, A.tracker_id, B.name AS tracker_name " +
+	/*private final static String SQL_QUERY_ALL = "SELECT distinct A._id,A.name, A.state, A.tracker_id, B.name AS tracker_name " +
 			"FROM statuses A , trackers B " +
-			"WHERE A.tracker_id= B._id and A.deleted<>1 AND A._id<>0 AND A.name IS NOT NULL AND A.name<>''";
+			"WHERE A.tracker_id= B._id and A.deleted<>1 AND A._id<>0 AND A.name IS NOT NULL AND A.name<>'' order by A.tracker_id";
+	*/
+	public final static String SQL_QUERY_ALL = "select * from "+TABLENAME+" WHERE deleted<>1 order by state";
 	public final static String SQL_QUERY_BY_ID = "SELECT * FROM "+TABLENAME+" WHERE _id=?";
 	public final static String SQL_QUERY_BY_TRACKER_ID = "SELECT * FROM "+TABLENAME+" WHERE tracker_id=? and deleted<>1";
 	public final static String SQL_DELETE = "update "+TABLENAME+" set deleted=1 where _id = ?";
@@ -39,7 +41,7 @@ public class StatusDAO extends AbstractDAOImpl {
 	}
 	
 	public List<StatusObject> query(){
-		return getJdbcTemplate().query(SQL_QUERY_ALL,new StatusWithTrackerNameMapper());
+		return getJdbcTemplate().query(SQL_QUERY_ALL,new StatusMapper());
 	}
 	
 	public List<StatusObject> queryByTrackerId(int tracker_id){
@@ -68,7 +70,7 @@ public class StatusDAO extends AbstractDAOImpl {
 			StatusObject obj =new StatusObject();
 			obj.setId( rs.getInt("_id") );
 			obj.setName( rs.getString("name") );
-			obj.setTrackerId( rs.getInt("tracker_id") );
+			//obj.setTrackerId( rs.getInt("tracker_id") );
 			obj.setState( rs.getInt( "state") );
 			return obj;
 		}

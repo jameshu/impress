@@ -34,13 +34,11 @@ function editview(id,name,state,tracker_id){
 </script>
 
 <br>
-<br>
-
 
 <table>
 <form id="statusform" name="statusform" method="post" action="/status/save">
   <tr>
-  <td>Group Name<select id="tracker_select" name="tracker_id">
+  <td>Tracker Name : <select id="tracker_select" name="tracker_id">
   
         <%
 		   List<TrackerObject> cglist = (List<TrackerObject>)request.getAttribute("trackerlist");
@@ -53,14 +51,15 @@ function editview(id,name,state,tracker_id){
   </td>
   </tr>
   <tr><td>
-  		<select id="state_select" name="state">
-  			<option value="1" selected="selected">open</option>
-  			<option value="0" >closed</option>
+  		Status State : <select id="state_select" name="state">
+  			<option value="0" selected="selected">Todo</option>
+  			<option value="1" >Doing</option>
+  			<option value="2" >Done</option>
   		</select>
   </td></tr>
   <tr><td>
     Status Name : 
-      <input name="status_name" size="50"/>  
+      <input name="status_name" size="20"/>  
       <input type="hidden" name="status_id"/>
           <input type="submit" name="submit" value="Save" />
       </td></tr>
@@ -72,8 +71,9 @@ function editview(id,name,state,tracker_id){
  <thead>
 		<tr>
 			<th>id</th>
-			<th>Name</th>
 			<th>Tracker Name</th>
+			<th>Name</th>
+			<th>State</th>
 			<th>Operations</th>
 		</tr>
 </thead>
@@ -85,11 +85,15 @@ function editview(id,name,state,tracker_id){
 		
 		<tr>
 			<td ><%=obj.getId()%></td>
-			<td style='width:100px;' nowrap><%=obj.getName()%></td>
 			<td style='width:100px;' nowrap><%=obj.getTrackerName()%></td>
+			<td style='width:100px;' nowrap><%=obj.getName()%></td>
+			<td style='width:100px;' nowrap><%=obj.getStateName()%></td>
 			<td>
-			<a href="/status/delete/<%=obj.getId()%>" style="margin-left:10px;">删除>>></a>
+			<a href="/status/delete/<%=obj.getId()%>" style="margin-left:10px;">删除>>></a> , &nbsp;&nbsp;&nbsp;
+			<a href="javascript:void(0)" onclick="editview('<%=obj.getId()%>','<%=obj.getName()%>','<%=obj.getState()%>','<%=obj.getTrackerId()%>')">编辑>>></a>
+			<!-- 
 			<input type="button" name="edit" value="编辑" onclick="editview('<%=obj.getId()%>','<%=obj.getName()%>','<%=obj.getState()%>','<%=obj.getTrackerId()%>')"/>
+		  	 -->
 		  </td>
 		</tr>
 		<%} } %>

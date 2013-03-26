@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.snda.iyouni.icommon.spring.BeanLocator;
 import com.snda.youni.taskweb.beans.CategoryObject;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.CategoryDAO;
 import com.snda.youni.taskweb.daos.CategorygroupDAO;
 import com.snda.youni.taskweb.util.RequestParameters;

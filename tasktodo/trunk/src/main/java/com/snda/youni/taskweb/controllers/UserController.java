@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.snda.iyouni.icommon.spring.BeanLocator;
 import com.snda.youni.taskweb.beans.UserObject;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.UserDAO;
 import com.snda.youni.taskweb.util.RequestParameters;
 

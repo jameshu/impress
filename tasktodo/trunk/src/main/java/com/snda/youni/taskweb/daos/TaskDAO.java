@@ -3,6 +3,7 @@ package com.snda.youni.taskweb.daos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -22,6 +23,7 @@ public class TaskDAO extends AbstractDAOImpl {
 					"tracker_id=?,status_id=?, subject=?, description=?,"+
 					"assignee=?,start_date=?,due_date=?,"+
 					"categorygroup=?,category=? where _id=?";
+	private final static String SQL_UPDATE_STATUS = "update "+TABLENAME+" set status_id=? where _id=?";
 
 	/*
 	private final static String SQL_QUERY_BY_ID = "select _id,feature_id,tracker_id,subject,description,assignee,status_id,"+
@@ -62,6 +64,11 @@ public class TaskDAO extends AbstractDAOImpl {
 		return true;
 	}
 	
+	public boolean updateStatus(int task_id, int status_id){
+		getJdbcTemplate().update(SQL_UPDATE_STATUS,status_id,task_id);
+		return true;
+	}
+	
 	public TaskObject findById(int id){
 		
 		TaskQueryBuilder qb = new TaskQueryBuilder();
@@ -83,6 +90,18 @@ public class TaskDAO extends AbstractDAOImpl {
 		pr.data = getJdbcTemplate().query(sql, new Object[]{startnum,num},new ObjectMapper());
 		pr.build();
 		return pr;
+	}
+	
+	public List<TaskObject> queryForList(int startnum,int num,Map<String,String> filters){
+		PageResult<TaskObject> pr = new PageResult<TaskObject>();
+		TaskQueryBuilder qb = new TaskQueryBuilder();
+		for(String key:filters.keySet()){
+			qb.addQuery(key, filters.get(key));
+		}
+		String buildsql = qb.buildQuerySQL();
+		String sql = "select * from ("+buildsql +") as tempt limit ?,?";
+		return getJdbcTemplate().query(sql, new Object[]{startnum,num},new ObjectMapper());
+
 	}
 	
 	private static final class ObjectMapper implements RowMapper<TaskObject>{

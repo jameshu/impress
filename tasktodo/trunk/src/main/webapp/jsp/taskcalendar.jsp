@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="header.jsp" %>
+<%@include file="subbar_myissues.jsp" %>
 <%@page import="com.snda.youni.taskweb.beans.*" %>
 <%@page import="com.snda.youni.taskweb.calendar.*" %>
 <%@page import="com.snda.youni.taskweb.util.JsonUtil" %>
@@ -35,7 +36,7 @@ if(request.getAttribute("q_fs_id")!=null){
 <script type="text/javascript">
 
 $().ready(function(){
-	
+	/*
 	$("#tracker_id_select").CascadingSelect($("#status_id_select"),
 			"/status/json", {
 				datatype : "json",
@@ -60,7 +61,7 @@ $().ready(function(){
 		timeFormat: "HH:mm",
 		minuteGrid: 15
 	});
-	
+	*/
 	//var url = "/featureproject/ajaxsearch";
 	//$("#q_featurename").autocomplete( 
 	//		{ 
@@ -123,7 +124,7 @@ $().ready(function(){
 	$.ajax({  
         type: "POST",  
         dataType: "json",  
-        url: "/task/me?rtype=json&q_status_state=1",  
+        url: "/task/me?rtype=json&q_status_state=0,1",  
         data: {},  
         success: function (data) {  
             //alert(data);  
@@ -138,13 +139,18 @@ $().ready(function(){
         }  
     });
 	
-	$("#tasklisttable").tablesorter( {sortList: [[0,0], [1,0]]} ); 
+	//$("#tasklisttable").tablesorter( {sortList: [[0,0], [1,0]]} ); 
 	
 });
 
 function onQuerySubmit(pagenum){
 	document.getElementById('q_page').value = pagenum;
 	$("#taskqueryform").submit();
+}
+
+function onIssueEditDialog(id){
+	divIssueEditDialog.load("/task/"+id+"/edit");
+	divIssueEditDialog.dialog("open");
 }
 
 </script>
@@ -157,51 +163,6 @@ function onQuerySubmit(pagenum){
   <a href="/task/list?q_fs_id=<%=q_fs_id%>">列表视图</a>
   <%} %>
 
-  <table class="cloth">
-    <form id="newtaskform" method="post" action="/task/save">
-    <tr>
-	    <th colspan="2">快速新建研发任务【to自己】
-	    <input id="submit" class="submit" type="submit" name="submit" value="保存" />
-	    </th>
-    </tr>
-    <tr>
-      <td>名称  </td>
-      <td>
-      <input type="hidden" name="assignee_id" value="<%=currentuser_id%>"/>
-      <input type="text" id="subject" name="subject" size="25" required />
-      <input type="hidden" name="start_date" value="<%=nowdatestr%>"/>
-      <input type="hidden" name="due_date" value="<%=nowdatestr%>"/>
-      </td>
-    </tr>
-    <tr>
-      <td> Tracker
-      </td>
-      <td>
-           <select id="tracker_id_select" name="tracker_id" required>
-								<option value="" selected="true">请选择</option> 
-								<%if(trackerlist!=null){
-								  for(TrackerObject obj:trackerlist){
-								%>
-								<option value="<%=obj.getId()%>"><%=obj.getName()%></option> 
-								<%}} %>
-		   </select>
-		   Status:
-		   <select id="status_id_select" name="status_id" required>
-		   </select>
-      </td>
-    </tr>
-    <tr>
-      <td>开始时间</td>
-      <td><input name="start_datetime" id="start_datetime" size="20" required/>
-      </td>
-    </tr>
-    <tr>
-      <td>结束时间</td>
-      <td><input name="due_datetime" id="due_datetime" size="20" required/>
-      </td>
-    </tr>
-    </form>
-  </table>
   
   <table id="doingtable" class="cloth">
     <tr>
@@ -285,7 +246,7 @@ for (int i = 1; i <= interval+1; i++) {
 	         if( tmpDate.getTime() >=tmpStartDate.getTime()
 	        		 && tmpDate.getTime()<=tmpDueDate.getTime()){%>
 			 <div class="issue<%=obj.getStatusState()%> <%if(tmpDate.getTime()<tmpDueDate.getTime()){out.print("starting");}else{out.print("ending");}%>">
-			   <a href="/task/<%=obj.getId()%>/edit"><%=obj.getId()+":"+obj.getSubject()%></a><br>
+			   <a href="javascript:void(0)" onclick="onIssueEditDialog(<%=obj.getId()%>)" ><%=obj.getId()+":"+obj.getSubject()%></a><br>
 			   Assigee:<%=obj.getAssigeeName()%> <br>
 			   Status:<%=obj.getStatusName() %>
 			 </div>	

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.snda.iyouni.icommon.spring.BeanLocator;
 import com.snda.youni.taskweb.beans.StatusObject;
 import com.snda.youni.taskweb.beans.TrackerObject;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.StatusDAO;
 import com.snda.youni.taskweb.daos.TrackerDAO;
 import com.snda.youni.taskweb.util.RequestParameters;
@@ -66,7 +66,7 @@ public class StatusController {
 	}
 	
 	@RequestMapping(value="/delete/{id}")
-	public ModelAndView groupdelete(@PathVariable int id,HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView delete(@PathVariable int id,HttpServletRequest request,HttpServletResponse response){
 		
 		StatusDAO dao = BeanLocator.getBean("statusDAO");
 		dao.delete(id);
@@ -86,7 +86,8 @@ public class StatusController {
 		int tracker_id = RequestParameters.getInt(request, "tracker_id", 0);
 		
 		StatusDAO dao = BeanLocator.getBean("statusDAO");
-		List<StatusObject> list = dao.queryByTrackerId(tracker_id);
+		//List<StatusObject> list = dao.queryByTrackerId(tracker_id);
+		List<StatusObject> list = dao.query();
 		
 		ObjectMapper mapper = new ObjectMapper();
 		//mapper.write

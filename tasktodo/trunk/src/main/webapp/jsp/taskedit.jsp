@@ -26,7 +26,7 @@ TaskObject taskObject = (TaskObject)request.getAttribute("task");
 
 $().ready(function(){
 	
-	
+	tform = $('#taskform');
 	
 	$('#commentForm').validate();
 	
@@ -193,7 +193,7 @@ $().ready(function(){
 
 	<%}%>	
 	
-	
+
 	$('#taskform').ajaxForm(function() {
 		
         alert("保存成功"); 
@@ -206,8 +206,9 @@ $().ready(function(){
 <table>
 	<tr>
 		<td>
+		<form class="taskform" id="taskform" method="post"	action="/task/save">
 			<table class="cloth">
-				<form class="taskform" id="taskform" method="post"	action="/task/save">
+				
 				    <%if(taskObject!=null){ %>
 				    <input type="hidden" name="task_id" value="<%=taskObject.getId()%>"/>
 				    <%} %>
@@ -304,8 +305,9 @@ $().ready(function(){
 						<input id="submit" class="submit" type="submit" name="submit" value="保存" />
 					</td>
 				</tr>
-				</form>
+				
 			</table>
+			</form>
 		<td>
 	</tr>
 </table>

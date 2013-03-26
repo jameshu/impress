@@ -18,11 +18,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.snda.iyouni.icommon.context.AppSettings;
-import com.snda.iyouni.icommon.spring.BeanLocator;
 import com.snda.youni.taskweb.beans.UserObject;
+import com.snda.youni.taskweb.common.AppSettings;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.UserDAO;
-import com.snda.youni.taskweb.managers.UserManager;
 
 
 @Controller

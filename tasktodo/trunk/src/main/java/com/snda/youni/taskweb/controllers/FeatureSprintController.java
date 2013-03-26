@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.snda.iyouni.icommon.spring.BeanLocator;
 import com.snda.youni.taskweb.beans.BacklogObject;
 import com.snda.youni.taskweb.beans.FeatureSprintObject;
 import com.snda.youni.taskweb.beans.UserObject;
+import com.snda.youni.taskweb.common.BeanLocator;
 import com.snda.youni.taskweb.daos.BacklogDAO;
 import com.snda.youni.taskweb.daos.FeatureSprintDAO;
 import com.snda.youni.taskweb.daos.UserDAO;

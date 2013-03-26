@@ -3,7 +3,7 @@ package com.snda.youni.taskweb.util;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import com.snda.iyouni.icommon.context.AppSettings;
+import com.snda.youni.taskweb.common.AppSettings;
 
 public class CurrentUserCookie {
 

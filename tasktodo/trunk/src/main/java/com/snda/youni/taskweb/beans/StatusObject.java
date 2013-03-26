@@ -32,4 +32,12 @@ public class StatusObject extends BaseObject {
 		this.trackerName = trackerName;
 	}
 	
+	public String getStateName(){
+		if(getState()==IssueStatusState.TODO.ordinal()) return IssueStatusState.TODO.toString();
+		if(getState()==IssueStatusState.DOING.ordinal()) return IssueStatusState.DOING.toString();
+		if(getState()==IssueStatusState.DONE.ordinal()) return IssueStatusState.DONE.toString();
+		return "";
+		
+	}
+	
 }

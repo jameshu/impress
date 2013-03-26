@@ -82,7 +82,7 @@ public class TaskQueryBuilder {
 				continue;
 			}
 			if(FILTERNAME_status_state.equals(filter)){
-				sql_filter = sql_filter +" and "+ "status_state="+filters.get(filter);
+				sql_filter = sql_filter +" and "+ "status_state in ("+filters.get(filter)+")";
 				continue;
 			}
 			if(FILTERNAME_assignee_login.equals(filter)){

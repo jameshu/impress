@@ -31,6 +31,7 @@ List<TreeNode> nodes = (List<TreeNode>)request.getAttribute("nodes");
 
 var selected_node;
 var selected_backlog_id = -1;
+var treeinst;
 
 $().ready(function(){
 	$.ajaxSetup({cache:false});
@@ -71,6 +72,7 @@ $().ready(function(){
       	}
 	}).bind("loaded.jstree", function (e, data) {
 		//data.inst.open_all(-1);
+		treeinst = data.inst;
 	}).bind("select_node.jstree", function (e, data) { 
 		//select node action
 		selected_backlog_id = data.rslt.obj.attr("id");
@@ -172,6 +174,15 @@ function onBtnClick_BacklogForm(){
 	});
 }
 
+function onExpendNodeAll(){
+	//$("#demo1").jstree().open_all(-1);
+	treeinst.open_all(-1) ;
+}
+
+function onCloseNodeAll(){
+	treeinst.close_all(-1) ;
+}
+
 function onToRootNode(){
 	location.href ="/backlog";
 }
@@ -197,7 +208,10 @@ function onNodeSearch(){
 
 <table>
 <tr>
-	<td><a href='javascript:void(0)' onclick='onToRootNode()'>返回顶节点</a>  --> 
+	<td>
+		<input type="button" name="savebutton" value="展开" onclick="onExpendNodeAll()"/>
+		<input type="button" name="savebutton" value="关闭" onclick="onCloseNodeAll()"/>
+		<a href='javascript:void(0)' onclick='onToRootNode()'>返回顶节点</a>  --> 
 		<a href='javascript:void(0)' onclick='onToSelectedNode()'>当前选择节点</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="text" id="search_name" name="search_name" size="20"/>

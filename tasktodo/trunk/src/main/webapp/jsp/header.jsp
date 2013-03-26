@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ page import="com.snda.iyouni.icommon.context.AppSettings"%>
+<%@ page import="com.snda.youni.taskweb.common.AppSettings"%>
 <%@ page import="com.snda.youni.taskweb.util.CurrentUserCookie"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -36,12 +36,15 @@ $().ready(function(){
 		}else{
 			$("#a_gtb_issues").attr("class","tab active");
 		}
+	}else if(currentURL.indexOf("/backlog")>0){
+		$("#a_gtb_backlogs").attr("class","tab active");
 	}else if(currentURL.indexOf("/fsprint/list")>0){
 		$("#a_gtb_sprints").attr("class","tab active");
 	}else{
 		$("#a_gtb_admin").attr("class","tab active");
 	}
 	
+	var tform;
 	//I have to use gloabl var to close dialog.
 	divIssueEditDialog = $( "#issueDialog" );
 	divIssueEditDialog.dialog({
@@ -49,6 +52,10 @@ $().ready(function(){
 	      height: 530,
 	      width: 650,
 	      modal: true,
+	      show: {
+	          effect: "blind",
+	          duration: 1000
+	        },
 	      buttons: {
 	    	  "关闭":function(){
 	    		  divIssueEditDialog.dialog('close')
@@ -117,7 +124,7 @@ function onIssueAddDialog(){
   -->
 <div id="mt" class="gtb"> 
  <a id="a_gtb_newissue" href="javascript:void(0)" class="tab " onclick="onIssueAddDialog()">New Issue</a>
- <a id="a_gtb_myissues" href="/task/me" class="tab ">My Issues</a>
+ <a id="a_gtb_myissues" href="/task/me?rview=kanban" class="tab ">My Issues</a>
  <a id="a_gtb_backlogs" href="#" class="tab ">Backlogs</a>
  <a id="a_gtb_sprints" href="/fsprint/list" class="tab ">Sprints</a>
  <a id="a_gtb_issues" href="/task/list" class="tab ">Issues[All]</a>

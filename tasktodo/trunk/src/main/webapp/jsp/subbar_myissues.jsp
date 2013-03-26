@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 
-<table cellspacing="0" cellpadding="0" width="100%" align="center"
-	border="0" class="st">
+<table cellspacing="0" cellpadding="0" width="100%" align="center"	border="0" class="st">
 	<tr>
 		<td class="subt">
 			<div class="st1">

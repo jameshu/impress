@@ -7,8 +7,10 @@
 		<td class="subt">
 			<div class="st1">
 				<div class="isf">
-					<span class="inst1"> <a href="/tracker/list">Trackers</a></span> &nbsp; 
+					<span class="inst3"> <a href="/tracker/list">Trackers</a></span> &nbsp; 
+					<!-- 
 					<span class="inst3"> <a href="/status/list">Statues</a></span> &nbsp;
+					 -->
 					<span class="inst3"> <a href="/category/grouplist">CategoryGroups</a></span> &nbsp;
 					<span class="inst3"> <a href="/category/list">Categorys</a></span> &nbsp;
 					<span class="inst3"> <a href="/user/list">Users</a></span> &nbsp;

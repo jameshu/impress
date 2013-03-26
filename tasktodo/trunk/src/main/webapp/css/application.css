@@ -84,5 +84,6 @@ table.cal .starting.ending a, p.cal.legend .starting.ending {background: url(../
 p.cal.legend span {display:block;}
 
 table.cal div.issue {background:#ffffdd; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}
-table.cal div.issue0 {background:#e4e4e4; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}
+table.cal div.issue0 {background:#c6f8ca; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}
 table.cal div.issue1 {background:#c6f8ca; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}
+table.cal div.issue2 {background:#e4e4e4; padding:1px; margin-bottom:1px;border: 1px solid #d7d7d7;margin: 0px 1 0px 1;}

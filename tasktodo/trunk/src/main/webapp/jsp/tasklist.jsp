@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="header.jsp" %>
-<%@include file="subbar_myissues.jsp" %>
 <%@page import="com.snda.youni.taskweb.beans.*" %>
 <%@page import="com.snda.youni.taskweb.util.JsonUtil" %>
 <%@page import="java.util.*" %>
 
 <%
-
 Integer pagenum = (Integer)request.getAttribute("page");
 if(pagenum==null){
 	pagenum = 1;
@@ -35,6 +33,13 @@ if(request.getAttribute("q_fs_id")!=null){
 
 
 $().ready(function(){
+	
+	var currentURL = window.location.href;
+	if(currentURL.indexOf("/task/me")>0){
+		$("#subbar_myissues").show();
+	}else{
+		$("#subbar_myissues").hide();
+	}
 	
 	/*
 	$("#tracker_id_select").CascadingSelect($("#status_id_select"),
@@ -115,7 +120,7 @@ $().ready(function(){
 	$.ajax({  
         type: "POST",  
         dataType: "json",  
-        url: "/task/me?rtype=json&q_status_state=1",  
+        url: "/task/me?rview=json&q_status_state=0,1",  
         data: {},  
         success: function (data) {  
             //alert(data);  
@@ -142,13 +147,31 @@ function onQuerySubmit(pagenum){
 }
 
 function onIssueEditDialog(id){
+	//divIssueEditDialog.dialog("destroy");
 	divIssueEditDialog.load("/task/"+id+"/edit");
 	divIssueEditDialog.dialog("open");
-	
-	
 }
 
 </script>
+
+<div id="subbar_myissues" stype="display:none;">
+	<table cellspacing="0" cellpadding="0" width="100%" align="center"	border="0" class="st">
+		<tr>
+			<td class="subt">
+				<div class="st1">
+					<div class="isf">
+						<span class="inst1"> <a href="/task/me?rview=kanban">白板</a></span> &nbsp; 
+						<span class="inst1"> <a href="/task/me?rview=kanban">列表</a></span> &nbsp; 
+					</div>
+				</div>
+	
+			</td>
+	
+	
+			<td align="right" valign="top" class="bevel-right"></td>
+		</tr>
+	</table>
+</div>
 
 <div id="main">
 
